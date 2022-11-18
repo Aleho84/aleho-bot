@@ -34,9 +34,13 @@ jobs:
           echo MONGOOSE_URI=${{ secrets.MONGOOSE_URI }} >> .env
           echo TELEGRAM_TOKEN=${{ secrets.TELEGRAM_TOKEN }} >> .env
           cat .env
-      - run: pm2 start pm2.json
-  test:
+  start:
     needs: deploy
+    runs-on: self-hosted
+    steps:
+      - run: pm2 start pm2.json   
+  test:
+    needs: start
     runs-on: self-hosted
     steps:
       - run: npm run test --if-present

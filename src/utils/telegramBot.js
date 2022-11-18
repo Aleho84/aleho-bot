@@ -1,0 +1,98 @@
+import tBot from 'node-telegram-bot-api'
+import os from 'os'
+import request from 'request'
+
+import logger from '../utils/logger.js'
+import { TELEGRAM_TOKEN } from '../config/constant.js'
+import { secondsToString, bytesToMegabytes } from './functions.js'
+
+let HELP_MESSAGE = '-- Ayuda 📜 -- \n'
+HELP_MESSAGE += '/Start : Activa el Bot. \n'
+HELP_MESSAGE += '/Stop : Desactiva el Bot. \n'
+HELP_MESSAGE += '/alehoserver : Estado de Aleho-Server. \n'
+HELP_MESSAGE += '/damejuegos  : Juegos gratis!!!'
+
+const BOT_INI = '-- Bot activado🤖 -- \n /help para obtener ayuda.'
+const BOT_END = '-- Bot desactivado🤖 --'
+
+const bot = new tBot(TELEGRAM_TOKEN, { polling: true })
+
+let botStart = false
+
+bot.onText(/\/(.+)/, (msg, match) => {
+  let chatID = msg.chat.id
+  let userID = msg.from.id
+  let userName = msg.from.first_name
+  let resp = match[1].toLowerCase()
+
+  if (botStart) {
+    switch (resp) {
+      case 'start':
+        botStart = true
+        bot.sendMessage(chatID, BOT_INI)
+        break
+
+      case 'stop':
+        botStart = false
+        bot.sendMessage(chatID, BOT_END)
+        break
+
+      case 'alehoserver':
+        try {
+          let serverUp = secondsToString(os.uptime())
+          let freeMem = parseInt(bytesToMegabytes(os.freemem()))
+          let totalMem = parseInt(bytesToMegabytes(os.totalmem()))
+          bot.sendMessage(chatID, `ALEHO-SERVER STATUS: \n El servidor esta online hace ${serverUp}. \n Tiene ${freeMem} MB de memoria libre de un total de ${totalMem} MB. \n y tu vieja en tanga...`)
+          break
+        } catch (error) {
+          bot.sendMessage(`ERROR:: ${error.message}.`)
+          logger.error(`ERROR:: ${error.message}.`)
+          break
+        }
+
+      case 'damejuegos':
+        try {          
+          request('https://www.gamerpower.com/api/filter?platform=epic-games-store.steam', (err, response, body) => {
+            if (!err) {
+              let respuesta = JSON.parse(body)
+              respuesta.forEach(element => {
+                if (element.status == 'Active' && element.type == 'Game' && element.end_date != 'N/A') {
+                  bot.sendMessage(chatID, `${element.open_giveaway_url} \n ${element.title}: \n Finaliza: ${element.end_date} `)
+                }
+              })
+            }
+          })
+          break
+        } catch (error) {
+          bot.sendMessage(`ERROR:: ${error.message}.`)
+          logger.error(`ERROR:: ${error.message}.`)
+          break
+        }
+
+      case 'help':
+        bot.sendMessage(chatID, HELP_MESSAGE)
+        break
+
+      default:
+        bot.sendMessage(chatID, `"/${resp}" no entiendo ese comando. Puedes ver la ayuda con el comando /help`)
+    }
+  } else {
+    switch (resp) {
+      case 'start':
+        botStart = true
+        bot.sendMessage(chatID, BOT_INI)
+        break
+    }
+  }
+})
+
+//sniffer de mensajes
+bot.on('message', (msg) => {
+  let mensajeLog = '[TELEGRAM BOT]  ID:' + msg.message_id + '  CHATID:' + msg.chat.id + '  USERID:' + msg.from.id + '  USERNAME:' + msg.from.first_name + '  MENSAJE:' + msg.text.toString()
+  logger.info(mensajeLog)
+})
+
+//poll de errores
+bot.on("polling_error", (msg) => {
+  logger.info(msg)
+})

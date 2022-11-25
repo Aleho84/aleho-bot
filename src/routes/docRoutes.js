@@ -35,7 +35,8 @@ const swaggerOptions = {
     apis: [
         path.join(__dirname, '../doc/swagger/swagger-tags.js'),
         path.join(__dirname, '../doc/swagger/swagger-models.js'),
-        path.join(__dirname, '../doc/swagger/doc-users.js')
+        path.join(__dirname, '../doc/swagger/doc-users.js'),
+        path.join(__dirname, '../doc/swagger/doc-botCmd.js')
     ]
 }
 

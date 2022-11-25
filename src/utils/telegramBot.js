@@ -8,8 +8,8 @@ import { secondsToString, bytesToMegabytes, findFreeGames } from './functions.js
 let HELP_MESSAGE = '-- Ayuda 📜 -- \n'
 HELP_MESSAGE += '/Start : Activa el Bot. \n'
 HELP_MESSAGE += '/Stop : Desactiva el Bot. \n'
-HELP_MESSAGE += '/alehoserver : Estado de Aleho-Server. \n'
-HELP_MESSAGE += '/damejuegos  : Juegos gratis!!!'
+HELP_MESSAGE += '/serverstatus : Estado de Aleho-Server. \n'
+HELP_MESSAGE += '/freegames  : Juegos gratis!!!'
 
 const BOT_INI = '-- Bot activado🤖 -- \n /help para obtener ayuda.'
 const BOT_END = '-- Bot desactivado🤖 --'
@@ -36,14 +36,14 @@ bot.onText(/\/(.+)/, (msg, match) => {
         bot.sendMessage(chatID, BOT_END)
         break
 
-      case 'alehoserver':
+      case 'serverstatus':
         const serverUp = secondsToString(os.uptime())
         const freeMem = parseInt(bytesToMegabytes(os.freemem()))
         const totalMem = parseInt(bytesToMegabytes(os.totalmem()))
         bot.sendMessage(chatID, `ALEHO-SERVER STATUS: \n El servidor esta online hace ${serverUp}. \n Tiene ${freeMem} MB de memoria libre de un total de ${totalMem} MB. \n y tu vieja en tanga...`)
         break
 
-      case 'damejuegos':
+      case 'freegames':
         findFreeGames()
           .then(gameList => {
             gameList.forEach(game => {

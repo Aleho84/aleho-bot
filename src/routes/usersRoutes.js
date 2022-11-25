@@ -18,16 +18,9 @@ import {
 userRouter.get('/login', loginError)
 userRouter.get('/signin', signinError)
 userRouter.get('/logout', logout)
-
-// CON PASSPORT
+userRouter.get('/currentUser', currentUser)
 userRouter.post('/login', passport.authenticate('login', { failureRedirect: '/api/users/login' }), login)
 userRouter.post('/signin', passport.authenticate('signin', { failureRedirect: '/api/users/signin' }), signin)
-
-// CON JSONWEBTOKEN
-// userRouter.post('/login', login)
-// userRouter.post('/signin', signin)
-
-userRouter.get('/currentUser', currentUser)
 userRouter.delete('/delete/:id', auth, deleteUser)
 
 export default userRouter

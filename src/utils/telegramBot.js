@@ -1,10 +1,9 @@
 import tBot from 'node-telegram-bot-api'
 import os from 'os'
-import request from 'request'
 
 import logger from '../utils/logger.js'
 import { TELEGRAM_TOKEN } from '../config/constant.js'
-import { secondsToString, bytesToMegabytes } from './functions.js'
+import { secondsToString, bytesToMegabytes, findFreeGames } from './functions.js'
 
 let HELP_MESSAGE = '-- Ayuda 📜 -- \n'
 HELP_MESSAGE += '/Start : Activa el Bot. \n'
@@ -23,10 +22,10 @@ bot.onText(/\/(.+)/, (msg, match) => {
   let chatID = msg.chat.id
   let userID = msg.from.id
   let userName = msg.from.first_name
-  let resp = match[1].toLowerCase()
+  let botCmd = match[1].toLowerCase()
 
   if (botStart) {
-    switch (resp) {
+    switch (botCmd) {
       case 'start':
         botStart = true
         bot.sendMessage(chatID, BOT_INI)
@@ -38,46 +37,30 @@ bot.onText(/\/(.+)/, (msg, match) => {
         break
 
       case 'alehoserver':
-        try {
-          let serverUp = secondsToString(os.uptime())
-          let freeMem = parseInt(bytesToMegabytes(os.freemem()))
-          let totalMem = parseInt(bytesToMegabytes(os.totalmem()))
-          bot.sendMessage(chatID, `ALEHO-SERVER STATUS: \n El servidor esta online hace ${serverUp}. \n Tiene ${freeMem} MB de memoria libre de un total de ${totalMem} MB. \n y tu vieja en tanga...`)
-          break
-        } catch (error) {
-          bot.sendMessage(`ERROR:: ${error.message}.`)
-          logger.error(`ERROR:: ${error.message}.`)
-          break
-        }
+        const serverUp = secondsToString(os.uptime())
+        const freeMem = parseInt(bytesToMegabytes(os.freemem()))
+        const totalMem = parseInt(bytesToMegabytes(os.totalmem()))
+        bot.sendMessage(chatID, `ALEHO-SERVER STATUS: \n El servidor esta online hace ${serverUp}. \n Tiene ${freeMem} MB de memoria libre de un total de ${totalMem} MB. \n y tu vieja en tanga...`)
+        break
 
       case 'damejuegos':
-        try {          
-          request('https://www.gamerpower.com/api/filter?platform=epic-games-store.steam', (err, response, body) => {
-            if (!err) {
-              let respuesta = JSON.parse(body)
-              respuesta.forEach(element => {
-                if (element.status == 'Active' && element.type == 'Game' && element.end_date != 'N/A') {
-                  bot.sendMessage(chatID, `${element.open_giveaway_url} \n ${element.title}: \n Finaliza: ${element.end_date} `)
-                }
-              })
-            }
+        findFreeGames()
+          .then(gameList => {
+            gameList.forEach(game => {
+              bot.sendMessage(chatID, `${game.url} \n ${game.title}: \n Finaliza: ${game.end_date} `)
+            })
           })
-          break
-        } catch (error) {
-          bot.sendMessage(`ERROR:: ${error.message}.`)
-          logger.error(`ERROR:: ${error.message}.`)
-          break
-        }
+        break
 
       case 'help':
         bot.sendMessage(chatID, HELP_MESSAGE)
         break
 
       default:
-        bot.sendMessage(chatID, `"/${resp}" no entiendo ese comando. Puedes ver la ayuda con el comando /help`)
+        bot.sendMessage(chatID, `"/${botCmd}" no entiendo ese comando. Puedes ver la ayuda con el comando /help`)
     }
   } else {
-    switch (resp) {
+    switch (botCmd) {
       case 'start':
         botStart = true
         bot.sendMessage(chatID, BOT_INI)

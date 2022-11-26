@@ -1,6 +1,6 @@
 import mongoose from "mongoose"
 
-export const gameSchema = new mongoose.Schema({
+export const gamesSchema = new mongoose.Schema({
     id: {
         id: int,
         default: 0

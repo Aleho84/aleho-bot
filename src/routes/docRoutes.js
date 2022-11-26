@@ -42,7 +42,7 @@ const swaggerOptions = {
 
 const swaggerUIOptions = {
     customCss: '.swagger-ui .topbar { display: none }',
-    customSiteTitle: "simcompras-api",
+    customSiteTitle: packageJson.name,
     customfavIcon: "/ico/favicon.ico"
 }
 

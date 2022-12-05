@@ -11,7 +11,7 @@ export const secondsToString = function (seconds) {
         let minute = Math.floor((seconds / 60) % 60)
         minute = (minute < 10) ? '0' + minute : minute
         let second = seconds % 60
-        second = (second.toFixed(2) < 10) ? '0' + second : second
+        second = (second < 10) ? '0' + second.toFixed(0) : second.toFixed(0)
         return days + ' dias ' + hour + ':' + minute + ':' + second
     } catch (error) {
         return { error: `${error}` }

@@ -27,6 +27,8 @@ bot.onText(/\/(.+)/, (msg, match) => {
 
   switch (botCmd) {
     case 'start':
+      if (botStart) { break }
+      
       //cada 1 dia, revisa si hay juegos nuevos y te lo informa.
       if (!intervalObj) {
         intervalObj = setInterval(() => {
@@ -44,6 +46,7 @@ bot.onText(/\/(.+)/, (msg, match) => {
       break
 
     case 'stop':
+      if (!botStart) { break }
       clearInterval(intervalObj)
       intervalObj = null
 
@@ -52,6 +55,7 @@ bot.onText(/\/(.+)/, (msg, match) => {
       break
 
     case 'serverstatus':
+      if (!botStart) { break }
       const serverUp = secondsToString(os.uptime())
       const freeMem = parseInt(bytesToMegabytes(os.freemem()))
       const totalMem = parseInt(bytesToMegabytes(os.totalmem()))
@@ -59,6 +63,7 @@ bot.onText(/\/(.+)/, (msg, match) => {
       break
 
     case 'freegames':
+      if (!botStart) { break }
       findFreeGamesFunction()
         .then(gameList => {
           gameList.forEach(game => {
@@ -68,17 +73,19 @@ bot.onText(/\/(.+)/, (msg, match) => {
       break
 
     case 'help':
+      if (!botStart) { break }
       bot.sendMessage(chatID, HELP_MESSAGE)
       break
 
     default:
+      if (!botStart) { break }
       bot.sendMessage(chatID, `"/${botCmd}" no entiendo ese comando. Puedes ver la ayuda con el comando /help`)
   }
 })
 
 //sniffer de mensajes
 bot.on('message', (msg) => {
-  let mensajeLog = '[TELEGRAM BOT]  ID:' + msg.message_id + '  CHATID:' + msg.chat.id + '  USERID:' + msg.from.id + '  USERNAME:' + msg.from.first_name + '  MENSAJE:' + msg.text.toString()
+  let mensajeLog = `[TELEGRAM BOT] ID: ${msg.message_id}  CHATID: ${msg.chat.id}  USERID: ${msg.from.id}  USERNAME: ${msg.from.first_name}  MENSAJE: ${msg.text.toString()}  BOTSTARTED: ${botStart}`
   logger.info(mensajeLog)
 })
 

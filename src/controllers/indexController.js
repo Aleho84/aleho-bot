@@ -23,6 +23,8 @@ export const getSigninFail = (req, res) => {
 }
 
 export const getLogout = (req, res) => {
+  if (readUser(req).name === 'Anonymous') { return }
+
   req.session.destroy((err) => {
     if (err) {
       const msg = 'Failed to log out'

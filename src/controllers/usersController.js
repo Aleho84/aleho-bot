@@ -1,5 +1,6 @@
 import logger from '../utils/logger.js'
 import { usersDao } from '../daos/index.js'
+import { readUser } from '../utils/readUser.js'
 
 export const login = (req, res) => {
   try {
@@ -50,6 +51,13 @@ export const signinError = (req, res) => {
 
 export const logout = (req, res) => {
   try {
+    if (readUser(req).name === 'Anonymous') { 
+      const msg = `Can not closed anonymous session`
+      logger.info(msg)
+      res.status(400).json({ message: msg })
+      return
+    }
+
     req.session.destroy((err) => {
       if (err) {
         const msg = 'Failed to log out'

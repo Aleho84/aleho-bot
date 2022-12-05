@@ -8,8 +8,7 @@ const config = {
     mongoDB: {
         URL: MONGOOSE_URI,
         options: {
-            useNewUrlParser: true,
-            useUnifiedTopology: true,
+            useMongoClient: true
         }
     }
 }

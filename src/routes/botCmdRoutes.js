@@ -4,9 +4,11 @@ import { auth } from '../config/jsonwebtoken.js'
 const gameListRouter = Router()
 
 import {
-    freeGames
+    findFreeGames,
+    newFreeGames
 } from '../controllers/botCmdController.js'
 
-gameListRouter.get('/freegames', auth, freeGames)
+gameListRouter.get('/findfreegames', auth, findFreeGames)
+gameListRouter.get('/newfreegames', auth, newFreeGames)
 
 export default gameListRouter

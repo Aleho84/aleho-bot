@@ -1,9 +1,9 @@
 import MongoClass from '../containers/mongoClass.js'
 import { gamesSchema } from '../models/gamesSchema.js'
 
-export class MongoDBGame extends MongoClass {
+export class MongoDBGames extends MongoClass {
   constructor() {
-    super('game', gamesSchema);
+    super('games', gamesSchema)
   }
 
   async findByTitle(title) {

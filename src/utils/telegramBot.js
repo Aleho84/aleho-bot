@@ -3,7 +3,7 @@ import os from 'os'
 
 import logger from '../utils/logger.js'
 import { TELEGRAM_TOKEN } from '../config/constant.js'
-import { secondsToString, bytesToMegabytes, findFreeGames } from './functions.js'
+import { secondsToString, bytesToMegabytes, findFreeGamesFunction } from './functions.js'
 
 let HELP_MESSAGE = '-- Ayuda 📜 -- \n'
 HELP_MESSAGE += '/Start : Activa el Bot. \n'

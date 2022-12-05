@@ -1,6 +1,6 @@
-import { findFreeGames } from '../utils/functions.js'
+import { newFreeGames } from '../utils/functions.js'
 
-findFreeGames()
+newFreeGames()
     .then(response => {
         console.log(response)
     })

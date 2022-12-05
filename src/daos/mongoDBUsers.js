@@ -3,7 +3,7 @@ import { usersSchema } from '../models/usersSchema.js'
 
 export class MongoDBUsers extends MongoClass {
   constructor() {
-    super('users', usersSchema);
+    super('users', usersSchema)
   }
 
   async findByEmail(email) {

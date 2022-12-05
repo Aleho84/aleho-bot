@@ -1,13 +1,9 @@
 import mongoose from "mongoose"
 
 export const gamesSchema = new mongoose.Schema({
-    id: {
-        id: int,
+    game_id: {
+        type: Number,
         default: 0
-    },
-    url: {
-        type: String,
-        default: ''
     },
     title: {
         type: String,
@@ -17,7 +13,7 @@ export const gamesSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    status: {
+    end_date: {
         type: String,
         default: ''
     },
@@ -25,7 +21,11 @@ export const gamesSchema = new mongoose.Schema({
         type: String,
         default: ''
     },
-    end_date: {
+    url: {
+        type: String,
+        default: ''
+    },
+    status: {
         type: String,
         default: ''
     }

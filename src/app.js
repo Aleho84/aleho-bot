@@ -112,21 +112,21 @@ if (cluster.isPrimary && RUN_MODE === 'cluster') {
             throw error
         }
 
-        const bind = typeof port === 'string'
-            ? 'Pipe ' + port
-            : 'Port ' + port
+        const bind = typeof portNormalizer === 'string'
+            ? 'Pipe ' + portNormalizer
+            : 'Port ' + portNormalizer
 
         switch (error.code) {
             case 'EACCES':
-                logger.info(`Server HTTP: ${bind} requiere permisos elevados`)
+                logger.error(`[HTTP]: ⚠ ${bind} requiere permisos elevados`)
                 process.exit(1)
                 break
             case 'EADDRINUSE':
-                logger.info(`Server HTTP: ${bind} ya esta utilizado`)
+                logger.error(`[HTTP]: ⚠ ${bind} ya esta utilizado`)
                 process.exit(1)
                 break
             default:
-                logger.info(`Server HTTP: Error al conectar: [${error}]`)
+                logger.error(`[HTTP]: ⚠ Error al conectar: [${error}]`)
                 throw error
         }
     }

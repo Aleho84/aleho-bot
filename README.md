@@ -7,4 +7,11 @@
 ![](https://img.shields.io/github/commit-activity/y/aleho84/aleho-bot?style=plastic)
 
 ## Features
-- Telegram-Bot
+🤖 Bot commands
+
+/start : Activate bot.
+/stop : Deactivate bot
+/alehoserver : Show aleho-server status
+/damejuegos : Free games!!!'
+
+Every day it will search and notify you if there is a new game.

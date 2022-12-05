@@ -6,8 +6,8 @@ import { TELEGRAM_TOKEN } from '../config/constant.js'
 import { secondsToString, bytesToMegabytes, findFreeGamesFunction, newFreeGamesFunction } from './functions.js'
 
 let HELP_MESSAGE = '-- Ayuda 📜 -- \n'
-HELP_MESSAGE += '/Start : Activa el Bot. \n'
-HELP_MESSAGE += '/Stop : Desactiva el Bot. \n'
+HELP_MESSAGE += '/start : Activa el Bot. \n'
+HELP_MESSAGE += '/stop : Desactiva el Bot. \n'
 HELP_MESSAGE += '/serverstatus : Estado de Aleho-Server. \n'
 HELP_MESSAGE += '/freegames  : Juegos gratis!!!'
 

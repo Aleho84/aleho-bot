@@ -54,11 +54,11 @@ export const logout = (req, res) => {
       if (err) {
         const msg = 'Failed to log out'
         logger.warn(msg)
-        return res.status(500).send({ message: msg })
+        return res.status(500).json({ message: msg })
       }
       const msg = `Closed session ${req.user.email}`
       logger.info(msg)
-      res.status(200).send({ message: msg })
+      res.status(200).json({ message: msg })
     })
   } catch (err) {
     logger.error(err)

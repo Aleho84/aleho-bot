@@ -1,16 +1,15 @@
 import tBot from 'node-telegram-bot-api'
 import os from 'os'
-import request from 'request'
 
 import logger from '../utils/logger.js'
 import { TELEGRAM_TOKEN } from '../config/constant.js'
-import { secondsToString, bytesToMegabytes } from './functions.js'
+import { secondsToString, bytesToMegabytes, findFreeGamesFunction, newFreeGamesFunction } from './functions.js'
 
 let HELP_MESSAGE = '-- Ayuda 📜 -- \n'
 HELP_MESSAGE += '/Start : Activa el Bot. \n'
 HELP_MESSAGE += '/Stop : Desactiva el Bot. \n'
-HELP_MESSAGE += '/alehoserver : Estado de Aleho-Server. \n'
-HELP_MESSAGE += '/damejuegos  : Juegos gratis!!!'
+HELP_MESSAGE += '/serverstatus : Estado de Aleho-Server. \n'
+HELP_MESSAGE += '/freegames  : Juegos gratis!!!'
 
 const BOT_INI = '-- Bot activado🤖 -- \n /help para obtener ayuda.'
 const BOT_END = '-- Bot desactivado🤖 --'
@@ -18,71 +17,62 @@ const BOT_END = '-- Bot desactivado🤖 --'
 const bot = new tBot(TELEGRAM_TOKEN, { polling: true })
 
 let botStart = false
+let intervalObj
 
 bot.onText(/\/(.+)/, (msg, match) => {
   let chatID = msg.chat.id
   let userID = msg.from.id
   let userName = msg.from.first_name
-  let resp = match[1].toLowerCase()
+  let botCmd = match[1].toLowerCase()
 
-  if (botStart) {
-    switch (resp) {
-      case 'start':
-        botStart = true
-        bot.sendMessage(chatID, BOT_INI)
-        break
-
-      case 'stop':
-        botStart = false
-        bot.sendMessage(chatID, BOT_END)
-        break
-
-      case 'alehoserver':
-        try {
-          let serverUp = secondsToString(os.uptime())
-          let freeMem = parseInt(bytesToMegabytes(os.freemem()))
-          let totalMem = parseInt(bytesToMegabytes(os.totalmem()))
-          bot.sendMessage(chatID, `ALEHO-SERVER STATUS: \n El servidor esta online hace ${serverUp}. \n Tiene ${freeMem} MB de memoria libre de un total de ${totalMem} MB. \n y tu vieja en tanga...`)
-          break
-        } catch (error) {
-          bot.sendMessage(`ERROR:: ${error.message}.`)
-          logger.error(`ERROR:: ${error.message}.`)
-          break
-        }
-
-      case 'damejuegos':
-        try {          
-          request('https://www.gamerpower.com/api/filter?platform=epic-games-store.steam', (err, response, body) => {
-            if (!err) {
-              let respuesta = JSON.parse(body)
-              respuesta.forEach(element => {
-                if (element.status == 'Active' && element.type == 'Game' && element.end_date != 'N/A') {
-                  bot.sendMessage(chatID, `${element.open_giveaway_url} \n ${element.title}: \n Finaliza: ${element.end_date} `)
-                }
+  switch (botCmd) {
+    case 'start':
+      //cada 1 dia, revisa si hay juegos nuevos y te lo informa.
+      if (!intervalObj) {
+        intervalObj = setInterval(() => {
+          newFreeGamesFunction()
+            .then(gameList => {
+              gameList.forEach(game => {
+                bot.sendMessage(chatID, `${game.url} \n ${game.title}: \n Finaliza: ${game.end_date} `)
               })
-            }
+            })
+        }, 1000 * 60 * 60 * 24)
+      }
+
+      botStart = true
+      bot.sendMessage(chatID, BOT_INI)
+      break
+
+    case 'stop':
+      clearInterval(intervalObj)
+      intervalObj = null
+
+      botStart = false
+      bot.sendMessage(chatID, BOT_END)
+      break
+
+    case 'serverstatus':
+      const serverUp = secondsToString(os.uptime())
+      const freeMem = parseInt(bytesToMegabytes(os.freemem()))
+      const totalMem = parseInt(bytesToMegabytes(os.totalmem()))
+      bot.sendMessage(chatID, `ALEHO-SERVER STATUS: \n El servidor esta online hace ${serverUp}. \n Tiene ${freeMem} MB de memoria libre de un total de ${totalMem} MB. \n y tu vieja en tanga...`)
+      break
+
+    case 'freegames':
+      findFreeGamesFunction()
+        .then(gameList => {
+          gameList.forEach(game => {
+            bot.sendMessage(chatID, `${game.url} \n ${game.title}: \n Finaliza: ${game.end_date} `)
           })
-          break
-        } catch (error) {
-          bot.sendMessage(`ERROR:: ${error.message}.`)
-          logger.error(`ERROR:: ${error.message}.`)
-          break
-        }
+        })
+      break
 
-      case 'help':
-        bot.sendMessage(chatID, HELP_MESSAGE)
-        break
+    case 'help':
+      bot.sendMessage(chatID, HELP_MESSAGE)
+      break
 
-      default:
-        bot.sendMessage(chatID, `"/${resp}" no entiendo ese comando. Puedes ver la ayuda con el comando /help`)
-    }
-  } else {
-    switch (resp) {
-      case 'start':
-        botStart = true
-        bot.sendMessage(chatID, BOT_INI)
-        break
-    }
+    default:
+      bot.sendMessage(chatID, `"/${botCmd}" no entiendo ese comando. Puedes ver la ayuda con el comando /help`)
   }
 })
 

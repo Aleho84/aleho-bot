@@ -20,10 +20,10 @@ passport.use('signin', new LocalStrategy(
         }
         req.body.password = await encryptPassword(password)
         const nuevoUsuario = await usersDao.create(req.body)
-        nuevoUsuario.token = tokenGenerate(nuevoUsuario.nuevoUsuario)
+        nuevoUsuario.token = tokenGenerate(nuevoUsuario._doc)
         const msg = `User ${email} signin susscefuly`
         logger.info(msg)
-        logger.info('Token: ' + token)
+        logger.info('Token: ' + nuevoUsuario.token)
         return done(null, nuevoUsuario)
     }
 ))

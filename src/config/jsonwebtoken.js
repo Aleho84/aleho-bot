@@ -1,7 +1,5 @@
 import pkg from 'jsonwebtoken'
 const { sign, verify } = pkg
-import { readUser } from '../utils/readUser.js'
-
 import { PRIVATE_KEY } from '../config/constant.js'
 
 export const tokenGenerate = function (user) {

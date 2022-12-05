@@ -1,13 +1,12 @@
 {
   "name": "aleho-bot",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "El bot de Aleho",
   "main": "./src/app.js",
   "type": "module",
   "scripts": {
     "start": "node .",
-    "dev": "nodemon --no-warnings .",
-    "test": "node ./src/test/test.js"
+    "dev": "nodemon --no-warnings ."
   },
   "repository": {
     "type": "git",

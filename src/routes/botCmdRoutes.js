@@ -5,10 +5,12 @@ const gameListRouter = Router()
 
 import {
     findFreeGames,
-    newFreeGames
+    newFreeGames,
+    showLogs
 } from '../controllers/botCmdController.js'
 
 gameListRouter.get('/findfreegames', auth, findFreeGames)
 gameListRouter.get('/newfreegames', auth, newFreeGames)
+gameListRouter.get('/showlogs', showLogs)
 
 export default gameListRouter

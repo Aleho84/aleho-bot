@@ -47,3 +47,7 @@ export const deleteUser = async (req, res) => {
     })
     : res.status(404).json({ message: `User not found. ID:${req.params.id}` })
 }
+
+export const getLogger = (req, res) => {
+  res.render('logger', { user: readUser(req) })
+}

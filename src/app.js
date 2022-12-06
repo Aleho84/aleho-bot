@@ -6,9 +6,11 @@ import http from 'http'
 import mongoStore from 'connect-mongo'
 import passport from 'passport'
 import path from 'path'
+import { Server } from "socket.io"
 import session from 'express-session'
 
 import connectMongoDB from './config/mongo-db.js'
+import websockets from "./config/websocket.js"
 import logger from './utils/logger.js'
 
 import apiRouter from './routes/apiRoutes.js'
@@ -45,9 +47,14 @@ if (cluster.isPrimary && RUN_MODE === 'cluster') {
 } else {
     const app = express()
     const httpServer = http.createServer(app)
+    const ioServer = new Server(httpServer, {
+        cors: {
+            origin: "*",
+            methods: ["GET", "POST"],
+        },
+    })
 
     // MIDDLEWARES
-    // app.use(morgan('dev'))
     app.use(express.urlencoded({ extended: true }))
     app.use(express.json())
     app.use(express.static(path.join(__dirname, '../public')))
@@ -89,13 +96,15 @@ if (cluster.isPrimary && RUN_MODE === 'cluster') {
     // MONGODB
     connectMongoDB()
 
+    // WEBSOKET
+    websockets(ioServer)
+
     // HTTP SERVER
     const portNormalizer = normalizePort(PORT)
     app.set('port', portNormalizer)
-    const server = http.createServer(app)
-    server.listen(portNormalizer)
-    server.on('error', onError)
-    server.on('listening', onListening)
+    httpServer.listen(portNormalizer)
+    httpServer.on('error', onError)
+    httpServer.on('listening', onListening)
 
     function normalizePort(val) {
         // normaliza un puerto en un numero, una cadena o un valor falso.
@@ -133,7 +142,7 @@ if (cluster.isPrimary && RUN_MODE === 'cluster') {
 
     function onListening() {
         // event listener para HTTP server
-        const addr = server.address()
+        const addr = httpServer.address()
         const bind = typeof addr === 'string'
             ? 'pipe ' + addr
             : 'port ' + addr.port

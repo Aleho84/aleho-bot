@@ -110,3 +110,27 @@ export const newFreeGamesFunction = async () => {
         return { error: `${error}` }
     }
 }
+
+export const showLogsFunction = async () => {
+    try {
+        return [
+            {
+                timestamp: '[2022-12-06 12:41:52]',
+                level: 'info',
+                message: '🌱 ENVIRONMENT=development'
+            },
+            {
+                timestamp: '[2022-12-06 12:41:52]',
+                level: 'info',
+                message: '💻 Server started on port 8080. 🪛 Worker PID: 23096. MODO:fork'
+            },
+            {
+                timestamp: '[2022-12-06 12:41:52]',
+                level: 'info',
+                message: '[MONGODB]: 💾 Connected to MongoDB {192.168.0.3:27017/aleho-bot}'
+            }
+        ]
+    } catch (error) {
+        return { error: `${error}` }
+    }
+}

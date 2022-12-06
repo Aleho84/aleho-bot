@@ -40,7 +40,7 @@ if (cluster.isPrimary && RUN_MODE === 'cluster') {
         cluster.fork() // crea un proceso por cada cpu disponible
     }
     cluster.on('exit', (worker, code, signal) => {
-        logger.warn(`🛠 worker ${worker.process.pid} died`)
+        logger.warn(`🪛 worker ${worker.process.pid} died`)
     })
 } else {
     const app = express()
@@ -118,15 +118,15 @@ if (cluster.isPrimary && RUN_MODE === 'cluster') {
 
         switch (error.code) {
             case 'EACCES':
-                logger.error(`[HTTP]: ⚠ ${bind} requiere permisos elevados`)
+                logger.error(`[HTTP]: ❌ ${bind} requiere permisos elevados`)
                 process.exit(1)
                 break
             case 'EADDRINUSE':
-                logger.error(`[HTTP]: ⚠ ${bind} ya esta utilizado`)
+                logger.error(`[HTTP]: ❌ ${bind} ya esta utilizado`)
                 process.exit(1)
                 break
             default:
-                logger.error(`[HTTP]: ⚠ Error al conectar: [${error}]`)
+                logger.error(`[HTTP]: ❌ Error al conectar: [${error}]`)
                 throw error
         }
     }
@@ -137,6 +137,6 @@ if (cluster.isPrimary && RUN_MODE === 'cluster') {
         const bind = typeof addr === 'string'
             ? 'pipe ' + addr
             : 'port ' + addr.port
-        logger.info(`💻 Server started on port ${PORT}. 🛠  Worker PID: ${process.pid}. MODO:${RUN_MODE}`)
+        logger.info(`💻 Server started on port ${PORT}. 🪛 Worker PID: ${process.pid}. MODO:${RUN_MODE}`)
     }
 }

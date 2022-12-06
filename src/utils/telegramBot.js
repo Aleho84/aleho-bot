@@ -28,7 +28,7 @@ bot.onText(/\/(.+)/, (msg, match) => {
   switch (botCmd) {
     case 'start':
       if (botStart) { break }
-      
+
       //cada 1 dia, revisa si hay juegos nuevos y te lo informa.
       if (!intervalObj) {
         intervalObj = setInterval(() => {
@@ -38,7 +38,7 @@ bot.onText(/\/(.+)/, (msg, match) => {
                 bot.sendMessage(chatID, `${game.url} \n ${game.title}: \n Finaliza: ${game.end_date} `)
               })
             })
-        }, 1000 * 60 * 60 * 24)
+        }, 1000 * 60 * 60)
       }
 
       botStart = true

@@ -91,5 +91,5 @@ bot.on('message', (msg) => {
 
 //poll de errores
 bot.on("polling_error", (msg) => {
-  logger.info(msg)
+  logger.error(`[TELEGRAM BOT]: ${msg}`)
 })

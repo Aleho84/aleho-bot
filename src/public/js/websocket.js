@@ -46,8 +46,7 @@ function append(parent, element) {
     return parent.appendChild(element)
 }
 
-function appendLog(tbody, log) {
-    console.log(log)
+function appendLog(tbody, log) {    
     let timestamp = createNode('span')
     timestamp.className = 'sp_timestamp'
     timestamp.innerHTML = `${log.timestamp}: `

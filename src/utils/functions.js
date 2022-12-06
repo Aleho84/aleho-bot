@@ -99,7 +99,7 @@ export const newFreeGamesFunction = async () => {
         newFreeGameList.forEach(newGame => {
             foundGame = oldFreeGameList.find(oldGame => oldGame._doc.game_id === newGame.game_id)
             if (foundGame === undefined) {
-                logger.info(`New Game found: ${newGame.title}`)
+                logger.info(`[TELEGRAM BOT]: New Game found: ${newGame.title}`)
                 foundGamesList.push(newGame)
                 gamesDao.create(newGame)
             }

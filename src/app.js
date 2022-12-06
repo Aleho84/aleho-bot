@@ -34,15 +34,15 @@ import {
 import './utils/telegramBot.js'
 
 // SERVER
-logger.info(`🌱 ENVIRONMENT=${process.env.NODE_ENV}`)
+logger.info(`[SERVER]: 🌱 ENVIRONMENT=${process.env.NODE_ENV}`)
 
 if (cluster.isPrimary && RUN_MODE === 'cluster') {
-    logger.info(`🧮 Primary PID ${process.pid} is running. On port ${PORT}. MODO: ${RUN_MODE}.`)
+    logger.info(`[SERVER]: 🧮 Primary PID ${process.pid} is running. On port ${PORT}. MODO: ${RUN_MODE}.`)
     for (let i = 0; i < nroCPUs; i++) {
         cluster.fork() // crea un proceso por cada cpu disponible
     }
     cluster.on('exit', (worker, code, signal) => {
-        logger.warn(`🪛 worker ${worker.process.pid} died`)
+        logger.warn(`[SERVER]: 🪛  Worker ${worker.process.pid} died`)
     })
 } else {
     const app = express()
@@ -127,15 +127,15 @@ if (cluster.isPrimary && RUN_MODE === 'cluster') {
 
         switch (error.code) {
             case 'EACCES':
-                logger.error(`[HTTP]: ❌ ${bind} requiere permisos elevados`)
+                logger.error(`[SERVER]: ❌ ${bind} requiere permisos elevados`)
                 process.exit(1)
                 break
             case 'EADDRINUSE':
-                logger.error(`[HTTP]: ❌ ${bind} ya esta utilizado`)
+                logger.error(`[SERVER]: ❌ ${bind} ya esta utilizado`)
                 process.exit(1)
                 break
             default:
-                logger.error(`[HTTP]: ❌ Error al conectar: [${error}]`)
+                logger.error(`[SERVER]: ❌ Error al conectar: [${error}]`)
                 throw error
         }
     }
@@ -146,6 +146,6 @@ if (cluster.isPrimary && RUN_MODE === 'cluster') {
         const bind = typeof addr === 'string'
             ? 'pipe ' + addr
             : 'port ' + addr.port
-        logger.info(`💻 Server started on port ${PORT}. 🪛 Worker PID: ${process.pid}. MODO:${RUN_MODE}`)
+        logger.info(`[SERVER]: 💻 Server started on port ${PORT}. 🪛  Worker PID: ${process.pid}. MODO:${RUN_MODE}`)
     }
 }

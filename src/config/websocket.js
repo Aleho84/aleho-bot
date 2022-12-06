@@ -5,11 +5,11 @@ export default (ioServer) => {
         socket.emit(`server_handshake`)
 
         socket.on('client_handshake', () => {
-            logger.info(`📱 Cliente [${socket.id}] conectado`)
+            logger.info(`[WEBSOKET]:📱 Cliente [${socket.id}] conectado`)
         })
 
         socket.on('disconnect', () => {
-            logger.info(`📱 Cliente [${socket.id}] desconectado`)
+            logger.info(`[WEBSOKET]:📱 Cliente [${socket.id}] desconectado`)
         })
     })
 }

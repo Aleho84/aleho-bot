@@ -27,10 +27,10 @@ export const getLogout = (req, res) => {
 
   req.session.destroy((err) => {
     if (err) {
-      const msg = 'Failed to log out'
+      const msg = '[USERS]: Failed to log out'
       logger.warn(msg)
     } else if (req.user.email) {
-      const msg = `Closed session ${req.user.email}`
+      const msg = `[USERS]: Closed session ${req.user.email}`
       logger.info(msg)
     }
   })

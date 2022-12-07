@@ -50,7 +50,7 @@ passport.use('login', new LocalStrategy(
         user.token = tokenGenerate(user)
         const msg = `[USERS]: User ${email} login susscefuly`
         logger.info(msg)
-        logger.info('Token: ' + user.token)
+        // logger.info('Token: ' + user.token)
         return done(null, user)
     }
 ))

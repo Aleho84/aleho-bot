@@ -111,7 +111,9 @@ a {
 .wrapper {
   text-align: center;
 }
+/* ****** */
 
+/* ***logger*** */
 .sp_timestamp {
   text-align: left;
   font-family: Arial;
@@ -135,3 +137,14 @@ a {
   color: #000000;
   text-shadow: 0px 0px 2px #217ab9;
 }
+
+.loggerForm {
+  width: 800px;
+  margin: 4em auto;
+  padding: 2em 2em 2em 2em;
+  background: #fafafa;
+  border: 1px solid #ebebeb;
+  box-shadow: rgba(0, 0, 0, 0.14902) 0px 1px 1px 0px,
+    rgba(0, 0, 0, 0.09804) 0px 1px 2px 0px;
+}
+/* ****** */

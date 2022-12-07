@@ -1,6 +1,9 @@
 import axios from "axios"
 import logger from '../utils/logger.js'
 import { gamesDao } from '../daos/index.js'
+import { fileURLToPath } from 'url'
+import path from 'path'
+import fs from 'fs'
 
 //Funcion para pasar los segundos a una cadena string legible (C dias HH:MM:SS)
 export const secondsToString = function (seconds) {
@@ -113,24 +116,33 @@ export const newFreeGamesFunction = async () => {
 
 export const showLogsFunction = async () => {
     try {
-        return [
-            {
-                timestamp: '[2022-12-06 12:41:52]',
-                level: 'info',
-                message: '🌱 ENVIRONMENT=development'
-            },
-            {
-                timestamp: '[2022-12-06 12:41:52]',
-                level: 'info',
-                message: '💻 Server started on port 8080. 🪛 Worker PID: 23096. MODO:fork'
-            },
-            {
-                timestamp: '[2022-12-06 12:41:52]',
-                level: 'info',
-                message: '[MONGODB]: 💾 Connected to MongoDB {192.168.0.3:27017/aleho-bot}'
+        const __filename = fileURLToPath(import.meta.url)
+        const __dirname = path.dirname(__filename)
+        const file = path.join(__dirname, '../logs/info.log')
+        let jsonLogList = []
+
+        const read = fs.readFileSync(file, { encoding: 'utf8', flag: 'r' })
+
+        if (read.length === 0) { return [] }
+
+        const arrayLog = read.split(/\r\n|\r|\n/)
+
+        arrayLog.forEach(arrayLogElement => {
+            const line = arrayLogElement.split(' - ')
+            const jsonLine = {
+                timestamp: line[0],
+                level: ` ${line[1]} - `,
+                message: line[2]
             }
-        ]
+            if (!(line[1] == undefined)) {
+                jsonLine.level = jsonLine.level.toUpperCase()
+                jsonLogList.push(jsonLine)
+            }
+        })
+
+        return jsonLogList
     } catch (error) {
-        return { error: `${error}` }
+        logger.error(`[LOGGER]: ❌ ${error}`)
+        return []
     }
 }

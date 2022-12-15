@@ -23,17 +23,20 @@ export const getSigninFail = (req, res) => {
 }
 
 export const getLogout = (req, res) => {
-  if (readUser(req).name === 'Anonymous') { return }
-
-  req.session.destroy((err) => {
-    if (err) {
-      const msg = '[USERS]: Failed to log out'
-      logger.warn(msg)
-    } else if (req.user.email) {
-      const msg = `[USERS]: Closed session ${req.user.email}`
-      logger.info(msg)
-    }
-  })
+  if (readUser(req).name === 'Anonymous') {
+    const msg = '[USERS]: Can not closed anonymous session'
+    logger.warn(msg)
+  } else {
+    req.session.destroy((err) => {
+      if (err) {
+        const msg = '[USERS]: Failed to log out'
+        logger.warn(msg)
+      } else if (req.user.email) {
+        const msg = `[USERS]: Closed session ${req.user.email}`
+        logger.info(msg)
+      }
+    })
+  }
 
   res.redirect('/')
 }

@@ -10,10 +10,12 @@ import {
     __dirname,
     PROTOCOL,
     HOST,
+    HOST_LOCAL,
     PORT
 } from '../config/constant.js'
 
 const SERVER_SWAGGER = `${PROTOCOL}://${HOST}:${PORT}`
+const SERVER_SWAGGER_LOCAL = `${PROTOCOL}://${HOST_LOCAL}:${PORT}`
 const swaggerApp = express()
 
 // Swagger 
@@ -30,7 +32,7 @@ const swaggerOptions = {
                 url: packageJson.author.url
             }
         },
-        servers: [{ url: SERVER_SWAGGER }]
+        servers: [{ url: SERVER_SWAGGER }, { url: SERVER_SWAGGER_LOCAL }]
     },
     apis: [
         path.join(__dirname, '../doc/swagger/swagger-tags.js'),

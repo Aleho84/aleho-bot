@@ -1,10 +1,12 @@
 // VARIABLES
+import 'dotenv/config'
 import { fileURLToPath } from 'url'
 import path from 'path'
 import os from 'os'
 
 export const PROTOCOL = process.env.PROTOCOL || 'http'
 export const HOST = process.env.HOST || 'localhost'
+export const HOST_LOCAL = process.env.HOST_LOCAL || 'localhost'
 export const PORT = process.env.PORT || 8080
 export const RUN_MODE = process.env.RUN_MODE || 'fork'
 export const SECRET_STRING = process.env.SECRET_STRING

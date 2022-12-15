@@ -25,6 +25,7 @@ jobs:
           echo NODE_ENV=production >> .env
           echo PROTOCOL=http >> .env
           echo HOST=${{ secrets.HOST }} >> .env
+          echo HOST_LOCAL=${{ secrets.HOST_LOCAL }} >> .env
           echo PORT=${{ secrets.PORT }} >> .env
           echo RUN_MODE=fork >> .env
           echo SECRET_STRING=${{ secrets.SECRET_STRING }} >> .env

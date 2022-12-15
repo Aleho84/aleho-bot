@@ -1,11 +1,11 @@
 import axios from 'axios'
 import {
     PROTOCOL,
-    HOST,
+    HOST_LOCAL,
     PORT
 } from '../../config/constant.js'
 
-const URL = `${PROTOCOL}://${HOST}:${PORT}`
+const URL = `${PROTOCOL}://${HOST_LOCAL}:${PORT}`
 
 export const getCurrentUser = async () => {
     const urlRequest = `${URL}/api/users/currentUser`

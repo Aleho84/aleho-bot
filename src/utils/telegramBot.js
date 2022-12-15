@@ -3,21 +3,45 @@ import os from 'os'
 
 import logger from '../utils/logger.js'
 import { TELEGRAM_TOKEN } from '../config/constant.js'
-import { secondsToString, bytesToMegabytes, findFreeGamesFunction, newFreeGamesFunction } from './functions.js'
+
+import {
+  secondsToString,
+  bytesToMegabytes,
+  findFreeGamesFunction,
+  newFreeGamesFunction,
+  showLogsFunction,
+} from './functions.js'
 
 let HELP_MESSAGE = '-- Ayuda 📜 -- \n'
 HELP_MESSAGE += '/start : Activa el Bot. \n'
 HELP_MESSAGE += '/stop : Desactiva el Bot. \n'
+HELP_MESSAGE += '/freegames  : Juegos gratis!!! \n'
 HELP_MESSAGE += '/serverstatus : Estado de Aleho-Server. \n'
-HELP_MESSAGE += '/freegames  : Juegos gratis!!!'
+HELP_MESSAGE += '/showlogs  : Muestra los logs del servidor'
 
 const BOT_INI = '-- Bot activado🤖 -- \n /help para obtener ayuda.'
 const BOT_END = '-- Bot desactivado🤖 --'
 
 const bot = new tBot(TELEGRAM_TOKEN, { polling: true })
 
-let botStart = false
+let botStart = true
 let intervalObj
+
+//cada 1 dia, revisa si hay juegos nuevos y te lo informa.
+const intervalInit = () => {
+  if (!intervalObj) {
+    intervalObj = setInterval(() => {
+      newFreeGamesFunction()
+        .then(gameList => {
+          gameList.forEach(game => {
+            bot.sendMessage(chatID, `${game.url} \n ${game.title}: \n Finaliza: ${game.end_date} `)
+          })
+        })
+    }, 1000 * 60 * 60)
+  }
+}
+
+intervalInit()
 
 bot.onText(/\/(.+)/, (msg, match) => {
   let chatID = msg.chat.id
@@ -29,17 +53,7 @@ bot.onText(/\/(.+)/, (msg, match) => {
     case 'start':
       if (botStart) { break }
 
-      //cada 1 dia, revisa si hay juegos nuevos y te lo informa.
-      if (!intervalObj) {
-        intervalObj = setInterval(() => {
-          newFreeGamesFunction()
-            .then(gameList => {
-              gameList.forEach(game => {
-                bot.sendMessage(chatID, `${game.url} \n ${game.title}: \n Finaliza: ${game.end_date} `)
-              })
-            })
-        }, 1000 * 60 * 60)
-      }
+      intervalInit()
 
       botStart = true
       bot.sendMessage(chatID, BOT_INI)
@@ -54,6 +68,16 @@ bot.onText(/\/(.+)/, (msg, match) => {
       bot.sendMessage(chatID, BOT_END)
       break
 
+    case 'freegames':
+      if (!botStart) { break }
+      findFreeGamesFunction()
+        .then(gameList => {
+          gameList.forEach(game => {
+            bot.sendMessage(chatID, `${game.url} \n ${game.title}: \n Finaliza: ${game.end_date} `)
+          })
+        })
+      break
+
     case 'serverstatus':
       if (!botStart) { break }
       const serverUp = secondsToString(os.uptime())
@@ -62,13 +86,12 @@ bot.onText(/\/(.+)/, (msg, match) => {
       bot.sendMessage(chatID, `ALEHO-SERVER STATUS: \n El servidor esta online hace ${serverUp}. \n Tiene ${freeMem} MB de memoria libre de un total de ${totalMem} MB. \n y tu vieja en tanga...`)
       break
 
-    case 'freegames':
-      if (!botStart) { break }
-      findFreeGamesFunction()
-        .then(gameList => {
-          gameList.forEach(game => {
-            bot.sendMessage(chatID, `${game.url} \n ${game.title}: \n Finaliza: ${game.end_date} `)
-          })
+    case 'showlogs':
+      showLogsFunction()
+        .then(logs => {
+          logs.forEach(log => {
+            bot.sendMessage(chatID, `${log.timestamp} - ${log.level} \n ${log.message} `)
+          })          
         })
       break
 

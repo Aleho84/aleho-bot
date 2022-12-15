@@ -11,7 +11,8 @@
 
 /start : Activate bot.
 /stop : Deactivate bot
-/alehoserver : Show aleho-server status
 /damejuegos : Free games!!!'
+/alehoserver : Show aleho-server status
+/showlogs  : Muestra los logs del servidor
 
 Every day it will search and notify you if there is a new game.

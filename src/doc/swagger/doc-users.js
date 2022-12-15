@@ -68,6 +68,8 @@
  *       responses:
  *         "200":
  *           description: OK. Current user successfully loged out.
+ *         "400":
+ *           description: Bad Request. Can not closed anonymous session.
  *         "500":
  *           description: Internal Server Error.
  */

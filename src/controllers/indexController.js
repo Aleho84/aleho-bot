@@ -23,15 +23,20 @@ export const getSigninFail = (req, res) => {
 }
 
 export const getLogout = (req, res) => {
-  req.session.destroy((err) => {
-    if (err) {
-      const msg = 'Failed to log out'
-      logger.warn(msg)
-    } else if (req.user.email) {
-      const msg = `Closed session ${req.user.email}`
-      logger.info(msg)
-    }
-  })
+  if (readUser(req).name === 'Anonymous') {
+    const msg = '[USERS]: Can not closed anonymous session'
+    logger.warn(msg)
+  } else {
+    req.session.destroy((err) => {
+      if (err) {
+        const msg = '[USERS]: Failed to log out'
+        logger.warn(msg)
+      } else if (req.user.email) {
+        const msg = `[USERS]: Closed session ${req.user.email}`
+        logger.info(msg)
+      }
+    })
+  }
 
   res.redirect('/')
 }
@@ -44,4 +49,8 @@ export const deleteUser = async (req, res) => {
       user: userDeleted
     })
     : res.status(404).json({ message: `User not found. ID:${req.params.id}` })
+}
+
+export const getLogger = (req, res) => {
+  res.render('logger', { user: readUser(req) })
 }

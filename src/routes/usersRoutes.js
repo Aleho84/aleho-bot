@@ -14,7 +14,6 @@ import {
     deleteUser
 } from '../controllers/usersController.js'
 
-
 userRouter.get('/login', loginError)
 userRouter.get('/signin', signinError)
 userRouter.get('/logout', logout)

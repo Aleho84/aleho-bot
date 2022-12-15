@@ -6,9 +6,11 @@ import http from 'http'
 import mongoStore from 'connect-mongo'
 import passport from 'passport'
 import path from 'path'
+import { Server } from "socket.io"
 import session from 'express-session'
 
 import connectMongoDB from './config/mongo-db.js'
+import websockets from "./config/websocket.js"
 import logger from './utils/logger.js'
 
 import apiRouter from './routes/apiRoutes.js'
@@ -32,22 +34,27 @@ import {
 import './utils/telegramBot.js'
 
 // SERVER
-logger.info(`🌱 ENVIRONMENT=${process.env.NODE_ENV}`)
+logger.info(`[SERVER]: 🌱 ENVIRONMENT=${process.env.NODE_ENV}`)
 
 if (cluster.isPrimary && RUN_MODE === 'cluster') {
-    logger.info(`🧮 Primary PID ${process.pid} is running. On port ${PORT}. MODO: ${RUN_MODE}.`)
+    logger.info(`[SERVER]: 🧮 Primary PID ${process.pid} is running. On port ${PORT}. MODO: ${RUN_MODE}.`)
     for (let i = 0; i < nroCPUs; i++) {
         cluster.fork() // crea un proceso por cada cpu disponible
     }
     cluster.on('exit', (worker, code, signal) => {
-        logger.warn(`🛠 worker ${worker.process.pid} died`)
+        logger.warn(`[SERVER]: 🪛  Worker ${worker.process.pid} died`)
     })
 } else {
     const app = express()
     const httpServer = http.createServer(app)
+    const ioServer = new Server(httpServer, {
+        cors: {
+            origin: "*",
+            methods: ["GET", "POST"],
+        },
+    })
 
     // MIDDLEWARES
-    // app.use(morgan('dev'))
     app.use(express.urlencoded({ extended: true }))
     app.use(express.json())
     app.use(express.static(path.join(__dirname, '../public')))
@@ -89,13 +96,15 @@ if (cluster.isPrimary && RUN_MODE === 'cluster') {
     // MONGODB
     connectMongoDB()
 
+    // WEBSOKET
+    websockets(ioServer)
+
     // HTTP SERVER
     const portNormalizer = normalizePort(PORT)
     app.set('port', portNormalizer)
-    const server = http.createServer(app)
-    server.listen(portNormalizer)
-    server.on('error', onError)
-    server.on('listening', onListening)
+    httpServer.listen(portNormalizer)
+    httpServer.on('error', onError)
+    httpServer.on('listening', onListening)
 
     function normalizePort(val) {
         // normaliza un puerto en un numero, una cadena o un valor falso.
@@ -112,31 +121,31 @@ if (cluster.isPrimary && RUN_MODE === 'cluster') {
             throw error
         }
 
-        const bind = typeof port === 'string'
-            ? 'Pipe ' + port
-            : 'Port ' + port
+        const bind = typeof portNormalizer === 'string'
+            ? 'Pipe ' + portNormalizer
+            : 'Port ' + portNormalizer
 
         switch (error.code) {
             case 'EACCES':
-                logger.info(`Server HTTP: ${bind} requiere permisos elevados`)
+                logger.error(`[SERVER]: ❌ ${bind} requiere permisos elevados`)
                 process.exit(1)
                 break
             case 'EADDRINUSE':
-                logger.info(`Server HTTP: ${bind} ya esta utilizado`)
+                logger.error(`[SERVER]: ❌ ${bind} ya esta utilizado`)
                 process.exit(1)
                 break
             default:
-                logger.info(`Server HTTP: Error al conectar: [${error}]`)
+                logger.error(`[SERVER]: ❌ Error al conectar: [${error}]`)
                 throw error
         }
     }
 
     function onListening() {
         // event listener para HTTP server
-        const addr = server.address()
+        const addr = httpServer.address()
         const bind = typeof addr === 'string'
             ? 'pipe ' + addr
             : 'port ' + addr.port
-        logger.info(`💻 Server started on port ${PORT}. 🛠  Worker PID: ${process.pid}. MODO:${RUN_MODE}`)
+        logger.info(`[SERVER]: 💻 Server started on port ${PORT}. 🪛  Worker PID: ${process.pid}. MODO:${RUN_MODE}`)
     }
 }

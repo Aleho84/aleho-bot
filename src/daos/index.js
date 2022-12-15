@@ -12,7 +12,7 @@ switch (DB_MODE) {
     break
 
   default:
-    const errMsg = '⚠ DB_MODE not defined'
+    const errMsg = '[SERVER]: ❌ DB_MODE not defined'
     logger.error(errMsg)
     throw new Error(errMsg)
     break

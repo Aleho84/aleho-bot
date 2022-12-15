@@ -19,6 +19,7 @@ export default async () => {
         const mongoServer = MONGOOSE_URI.split('@')
         logger.info(`[MONGODB]: 💾 Connected to MongoDB {${mongoServer[1]}}`)
     } catch (error) {
-        logger.error(`[MONGODB]: ⚠ MongoDB Error: ${error}`)
+        logger.error(`[MONGODB]: ❌ ${error}`)
+        process.exit(1)
     }
 }

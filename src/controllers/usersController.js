@@ -1,5 +1,6 @@
 import logger from '../utils/logger.js'
 import { usersDao } from '../daos/index.js'
+import { readUser } from '../utils/readUser.js'
 
 export const login = (req, res) => {
   try {
@@ -50,13 +51,20 @@ export const signinError = (req, res) => {
 
 export const logout = (req, res) => {
   try {
+    if (readUser(req).name === 'Anonymous') { 
+      const msg = `[USERS]: Can not closed anonymous session`
+      logger.info(msg)
+      res.status(400).json({ message: msg })
+      return
+    }
+
     req.session.destroy((err) => {
       if (err) {
-        const msg = 'Failed to log out'
+        const msg = '[USERS]: Failed to log out'
         logger.warn(msg)
         return res.status(500).json({ message: msg })
       }
-      const msg = `Closed session ${req.user.email}`
+      const msg = `[USERS]: Closed session ${req.user.email}`
       logger.info(msg)
       res.status(200).json({ message: msg })
     })
@@ -82,12 +90,11 @@ export const currentUser = (req, res) => {
 
 export const deleteUser = async (req, res) => {
   try {
-    console.log('entro')
     const userDeleted = await usersDao.delete(req.params.id)
     userDeleted
       ? res.status(200).json({
         message: 'User deleted successfully',
-        cart: userDeleted
+        user: userDeleted
       })
       : res.status(404).json({ message: `User not found. ID:${req.params.id}` })
   } catch (err) {

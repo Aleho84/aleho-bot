@@ -11,6 +11,6 @@ import {
 
 gameListRouter.get('/findfreegames', auth, findFreeGames)
 gameListRouter.get('/newfreegames', auth, newFreeGames)
-gameListRouter.get('/showlogs', showLogs)
+gameListRouter.get('/showlogs', auth, showLogs)
 
 export default gameListRouter

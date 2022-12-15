@@ -41,3 +41,25 @@
  *         "500":
  *           description: Internal Server Error.
  */
+
+/**
+ * @swagger
+ * paths:
+ *   /api/botcmd/showlogs/:
+ *     get:
+ *       security:
+ *         - bearerAuth: []
+ *       summary: Bot logs.
+ *       description: Show Bot logs.
+ *       operationId: "showlogs"
+ *       tags:
+ *         - BotCmd
+ *       produces:
+ *         - application/json
+ *       parameters: []
+ *       responses:
+ *         "200":
+ *           description: OK. Bot logs obtained.
+ *         "500":
+ *           description: Internal Server Error.
+ */

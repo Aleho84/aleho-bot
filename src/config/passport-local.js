@@ -38,6 +38,8 @@ passport.use('signin', new LocalStrategy(
             return done(null, false, { message: msg })
         }
 
+        if (req.body.password2 === undefined) { req.body.password2 = req.body.password }
+
         if (req.body.password != req.body.password2) {
             const msg = `[USERS]: Signin fail, passwords do not match`
             logger.warn(msg)
@@ -93,12 +95,14 @@ passport.serializeUser((user, done) => {
 
 passport.deserializeUser(async (id, done) => {
     const user = await usersDao.get(id)
-    const { name, lastname, image, email } = user._doc
+    if (user) {
+        const { name, lastname, image, email } = user._doc
 
-    done(null, {
-        name,
-        lastname,
-        image,
-        email
-    })
+        done(null, {
+            name,
+            lastname,
+            image,
+            email
+        })
+    }
 })

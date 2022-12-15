@@ -90,12 +90,11 @@ export const currentUser = (req, res) => {
 
 export const deleteUser = async (req, res) => {
   try {
-    console.log('entro')
     const userDeleted = await usersDao.delete(req.params.id)
     userDeleted
       ? res.status(200).json({
         message: 'User deleted successfully',
-        cart: userDeleted
+        user: userDeleted
       })
       : res.status(404).json({ message: `User not found. ID:${req.params.id}` })
   } catch (err) {

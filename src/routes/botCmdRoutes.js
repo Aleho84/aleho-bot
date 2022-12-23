@@ -1,16 +1,19 @@
 import { Router } from 'express'
 import { auth } from '../config/jsonwebtoken.js'
 
-const gameListRouter = Router()
+const botCmdRouter = Router()
 
 import {
     findFreeGames,
     newFreeGames,
-    showLogs
+    showLogs,
+    dolarHoy
 } from '../controllers/botCmdController.js'
 
-gameListRouter.get('/findfreegames', auth, findFreeGames)
-gameListRouter.get('/newfreegames', auth, newFreeGames)
-gameListRouter.get('/showlogs', auth, showLogs)
+botCmdRouter.get('/findfreegames', auth, findFreeGames)
+botCmdRouter.get('/newfreegames', auth, newFreeGames)
+botCmdRouter.get('/showlogs', auth, showLogs)
+botCmdRouter.get('/showlogs', auth, showLogs)
+botCmdRouter.get('/dolarhoy', auth, dolarHoy)
 
-export default gameListRouter
+export default botCmdRouter

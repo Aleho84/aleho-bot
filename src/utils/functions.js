@@ -114,6 +114,7 @@ export const newFreeGamesFunction = async () => {
     }
 }
 
+//Devuelve los logs del servidor
 export const showLogsFunction = async () => {
     try {
         const __filename = fileURLToPath(import.meta.url)
@@ -145,4 +146,11 @@ export const showLogsFunction = async () => {
         logger.error(`[LOGGER]: ❌ ${error}`)
         return []
     }
+}
+
+//Devuelve la cotizacion del dolar y el euro
+export const dolarHoyFunction = async () => {
+    const urlRequest = `https://api.bluelytics.com.ar/v2/latest`
+    const response = await axios.get(urlRequest)
+    return response.data
 }

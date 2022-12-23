@@ -13,6 +13,7 @@
     /stop : Deactivate bot.
     /damejuegos : Free games!
     /alehoserver : Show aleho-server status.
-    /showlogs  : Muestra los logs del servidor.
+    /showlogs  : Show Bot logs.
+    /dolarhoy  : Show Dolar price in Argentina market.
 
 Every day it will search and notify you if there is a new game.

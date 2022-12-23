@@ -2,7 +2,8 @@ import logger from '../utils/logger.js'
 import {
   findFreeGamesFunction,
   newFreeGamesFunction,
-  showLogsFunction
+  showLogsFunction,
+  dolarHoyFunction
 } from '../utils/functions.js'
 
 export const findFreeGames = (req, res) => {
@@ -34,6 +35,18 @@ export const showLogs = (req, res) => {
     showLogsFunction()
       .then(logList => {
         res.status(200).send(logList)
+      })
+  } catch (err) {
+    logger.error(err)
+    res.status(500).json({ message: err.message, line: err.line })
+  }
+}
+
+export const dolarHoy = (req, res) => {
+  try {
+    dolarHoyFunction()
+      .then(response => {
+        res.status(200).send(response)
       })
   } catch (err) {
     logger.error(err)

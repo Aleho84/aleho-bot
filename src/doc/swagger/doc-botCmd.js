@@ -63,3 +63,25 @@
  *         "500":
  *           description: Internal Server Error.
  */
+
+/**
+ * @swagger
+ * paths:
+ *   /api/botcmd/dolarhoy/:
+ *     get:
+ *       security:
+ *         - bearerAuth: []
+ *       summary: Dolar & Euro price.
+ *       description: Show Dolar & Euro price in Argentina market.
+ *       operationId: "dolarhoy"
+ *       tags:
+ *         - BotCmd
+ *       produces:
+ *         - application/json
+ *       parameters: []
+ *       responses:
+ *         "200":
+ *           description: OK. Dolar & Euro price obtained.
+ *         "500":
+ *           description: Internal Server Error.
+ */

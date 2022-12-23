@@ -10,14 +10,16 @@ import {
   findFreeGamesFunction,
   newFreeGamesFunction,
   showLogsFunction,
+  dolarHoyFunction
 } from './functions.js'
 
 let HELP_MESSAGE = '-- Ayuda 📜 -- \n'
-HELP_MESSAGE += '/start : Activa el Bot. \n'
-HELP_MESSAGE += '/stop : Desactiva el Bot. \n'
-HELP_MESSAGE += '/freegames  : Juegos gratis!!! \n'
-HELP_MESSAGE += '/serverstatus : Estado de Aleho-Server. \n'
-HELP_MESSAGE += '/showlogs  : Muestra los logs del servidor'
+HELP_MESSAGE += '/start : Activate bot. \n'
+HELP_MESSAGE += '/stop : Deactivate bot. \n'
+HELP_MESSAGE += '/freegames : Free games! \n'
+HELP_MESSAGE += '/serverstatus : Show aleho-server status. \n'
+HELP_MESSAGE += '/showlogs : Show Bot logs.'
+HELP_MESSAGE += '/dolarhoy : Show Dolar price in Argentina market.'
 
 const BOT_INI = '-- Bot activado🤖 -- \n /help para obtener ayuda.'
 const BOT_END = '-- Bot desactivado🤖 --'
@@ -91,13 +93,30 @@ bot.onText(/\/(.+)/, (msg, match) => {
         .then(logs => {
           logs.forEach(log => {
             bot.sendMessage(chatID, `${log.timestamp} - ${log.level} \n ${log.message} `)
-          })          
+          })
         })
       break
 
     case 'help':
       if (!botStart) { break }
       bot.sendMessage(chatID, HELP_MESSAGE)
+      break
+
+    case 'dolarhoy':
+      if (!botStart) { break }
+      dolarHoyFunction()
+        .then(response => {
+          let blueBuy = response.blue.value_buy.toFixed(2)
+          let blueSell = response.blue.value_sell.toFixed(2)
+
+          let blueOlBuy = response.oficial.value_buy.toFixed(2)
+          let blueOSell = response.oficial.value_sell.toFixed(2)
+
+          let msg = `Dolar Oficial 🧑‍✈️ \n -Compra:  $${blueOlBuy}\n -Venta:      $${blueOSell}\n \n`
+          msg = msg + `Dolar Blue 💵 \n -Compra:  $${blueBuy}\n -Venta:      $${blueSell}`
+
+          bot.sendMessage(chatID, msg)
+        })
       break
 
     default:

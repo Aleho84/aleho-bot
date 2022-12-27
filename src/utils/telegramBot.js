@@ -26,24 +26,8 @@ const BOT_END = '-- Bot desactivado🤖 --'
 
 const bot = new tBot(TELEGRAM_TOKEN, { polling: true })
 
-let botStart = true
+let botStart = false
 let intervalObj
-
-//cada 1 dia, revisa si hay juegos nuevos y te lo informa.
-const intervalInit = () => {
-  if (!intervalObj) {
-    intervalObj = setInterval(() => {
-      newFreeGamesFunction()
-        .then(gameList => {
-          gameList.forEach(game => {
-            bot.sendMessage(chatID, `${game.url} \n ${game.title}: \n Finaliza: ${game.end_date} `)
-          })
-        })
-    }, 1000 * 60 * 60)
-  }
-}
-
-intervalInit()
 
 bot.onText(/\/(.+)/, (msg, match) => {
   let chatID = msg.chat.id
@@ -54,6 +38,20 @@ bot.onText(/\/(.+)/, (msg, match) => {
   switch (botCmd) {
     case 'start':
       if (botStart) { break }
+
+      //cada 1 hora, revisa si hay juegos nuevos y te lo informa.
+      const intervalInit = () => {
+        if (!intervalObj) {
+          intervalObj = setInterval(() => {
+            newFreeGamesFunction()
+              .then(gameList => {
+                gameList.forEach(game => {
+                  bot.sendMessage(chatID, `${game.url} \n ${game.title}: \n Finaliza: ${game.end_date} `)
+                })
+              })
+          }, 1000)
+        }
+      }
 
       intervalInit()
 

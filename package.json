@@ -45,5 +45,8 @@
     "swagger-jsdoc": "^6.2.5",
     "swagger-ui-express": "^4.6.0",
     "winston": "^3.8.2"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.20"
   }
 }

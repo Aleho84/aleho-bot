@@ -18,7 +18,7 @@ HELP_MESSAGE += '/start : Activate bot. \n'
 HELP_MESSAGE += '/stop : Deactivate bot. \n'
 HELP_MESSAGE += '/freegames : Free games! \n'
 HELP_MESSAGE += '/serverstatus : Show aleho-server status. \n'
-HELP_MESSAGE += '/showlogs : Show Bot logs.'
+HELP_MESSAGE += '/showlogs : Show Bot logs. \n'
 HELP_MESSAGE += '/dolarhoy : Show Dolar price in Argentina market.'
 
 const BOT_INI = '-- Bot activado🤖 -- \n /help para obtener ayuda.'

@@ -47,22 +47,22 @@ function append(parent, element) {
 }
 
 function appendLog(tbody, log) {    
-    let timestamp = createNode('span')
+    let timestamp = createNode('td')
     timestamp.className = 'sp_timestamp'
     timestamp.innerHTML = `${log.timestamp}: `
 
-    let level = createNode('span')
+    let level = createNode('td')
     level.className = 'sp_level'
     level.innerHTML = `${log.level}`
 
-    let message = createNode('span')
+    let message = createNode('td')
     message.className = 'message'
     message.innerHTML = log.message
 
-    let br = createNode('br')
+    let tr = createNode('tr')
 
-    append(tbody, timestamp)
-    append(tbody, level)
-    append(tbody, message)
-    append(tbody, br)
+    append(tbody, tr)
+    append(tr, timestamp)
+    append(tr, level)
+    append(tr, message)    
 }

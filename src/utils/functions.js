@@ -132,7 +132,7 @@ export const showLogsFunction = async () => {
             const line = arrayLogElement.split(' - ')
             const jsonLine = {
                 timestamp: line[0],
-                level: ` ${line[1]} - `,
+                level: ` ${line[1]} `,
                 message: line[2]
             }
             if (!(line[1] == undefined)) {

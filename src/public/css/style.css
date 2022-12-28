@@ -117,23 +117,25 @@ a {
 .sp_timestamp {
   text-align: left;
   font-family: Arial;
-  font-size: 13px;
+  font-size: 10px;
   color: #1278bf;
   text-shadow: 0px 0px 2px #217ab9;
+  width: 103px;
 }
 
 .sp_level {
   text-align: left;
   font-family: Arial;
-  font-size: 13px;
+  font-size: 10px;
   color: #f32d2d;
   text-shadow: 0px 0px 2px #217ab9;
+  width: 26px;
 }
 
 .message {
   text-align: left;
   font-family: Arial;
-  font-size: 13px;
+  font-size: 10px;
   color: #000000;
   text-shadow: 0px 0px 2px #217ab9;
 }

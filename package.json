@@ -1,0 +1,69 @@
+{
+  "name": "aleho-bot",
+  "version": "1.0.0",
+  "description": "El bot de Aleho",
+  "main": "./src/app.js",
+  "type": "module",
+  "scripts": {
+    "start": "sudo node .",
+    "dev": "nodemon --no-warnings .",
+    "update": "ncu -u && npm update",
+    "docker": "git pull && docker compose up -d --build",
+    "test": "node node_modules/mocha/bin/mocha.js ./src/test/test.js",
+    "temptest": "nodemon ./src/test/temptest.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Aleho84/aleho-bot.git"
+  },
+  "author": {
+    "name": "Alejandro Abraham",
+    "email": "alejandro.r.abraham@gmail.com",
+    "url": "https://github.com/Aleho84"
+  },
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Aleho84/aleho-bot/issues"
+  },
+  "homepage": "https://github.com/Aleho84/aleho-bot#readme",
+  "devDependencies": {
+    "nodemon": "^3.1.9"
+  },
+  "nodemonConfig": {
+    "ignore": [
+      "node_modules",
+      "./src/logs"
+    ]
+  },
+  "dependencies": {
+    "@google/generative-ai": "^0.21.0",
+    "axios": "^1.7.9",
+    "bcrypt": "^5.1.1",
+    "chai": "^5.1.2",
+    "chart.js": "^4.4.7",
+    "connect-mongo": "^5.1.0",
+    "cookie-parser": "^1.4.7",
+    "cors": "^2.8.5",
+    "discord-webhook-node": "^1.1.8",
+    "discord.js": "^14.17.3",
+    "dotenv": "^16.4.7",
+    "ejs": "^3.1.10",
+    "express": "^4.21.2",
+    "express-session": "^1.18.1",
+    "jsonwebtoken": "^9.0.2",
+    "mocha": "^11.0.1",
+    "mongoose": "^8.9.3",
+    "node-cache": "^5.1.2",
+    "node-telegram-bot-api": "^0.66.0",
+    "nodemailer": "^6.9.16",
+    "passport": "^0.7.0",
+    "passport-local": "^1.0.0",
+    "ping": "^0.4.4",
+    "socket.io": "^4.8.1",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.1",
+    "winston": "^3.17.0",
+    "winston-daily-rotate-file": "^5.0.0",
+    "winston-mongodb": "^6.0.0"
+  }
+}

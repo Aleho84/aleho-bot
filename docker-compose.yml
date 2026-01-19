@@ -1,0 +1,57 @@
+services:
+  nginx:
+    image: nginx:1.27-alpine
+    container_name: nginx
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/conf:/etc/nginx/conf.d
+      - /etc/letsencrypt:/etc/letsencrypt:ro
+    networks:
+      - app-network
+
+  app:
+    build: .
+    container_name: aleho-bot-app
+    restart: always
+    environment:
+      - ACTION=docker
+      - PORT=3000
+      - MONGOOSE_URI=mongodb://mongo:27017/alehobot
+      - PROTOCOL=http
+      - HOST=aleho-bot.sytes.net
+    env_file:
+      - .env
+    volumes:
+      - ./src/logs:/app/src/logs
+    depends_on:
+      mongo:
+        condition: service_healthy
+    networks:
+      - app-network
+
+  mongo:
+    image: mongo:4.4.6
+    container_name: mongo
+    restart: always
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+    networks:
+      - app-network
+    healthcheck:
+      test: [ "CMD", "mongo", "--eval", "db.adminCommand('ping')" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 5s
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  mongo-data:

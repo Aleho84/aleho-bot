@@ -2,7 +2,7 @@ import logger from '../utils/logger.js';
 import { usersDao } from '../daos/index.js';
 import { readUser } from '../utils/helpers.js';
 
-export const login = (req, res) => {
+export const login = (req, res, next) => {
   try {
     res.status(200).json({
       message: `Usuario: ${req.user.email} Login exitoso.`,
@@ -11,21 +11,19 @@ export const login = (req, res) => {
       token: req.user.token
     });
   } catch (err) {
-    logger.error(err);
-    res.status(500).json({ message: err.message, line: err.line });
+    next(err);
   };
 };
 
-export const loginError = (req, res) => {
+export const loginError = (req, res, next) => {
   try {
     res.status(401).json({ message: `Error de Login` });
   } catch (err) {
-    logger.error(err);
-    res.status(500).json({ message: err.message, line: err.line });
+    next(err);
   };
 };
 
-export const signin = (req, res) => {
+export const signin = (req, res, next) => {
   try {
     res.status(201).json({
       message: 'Usuario registrado exitosamente.',
@@ -34,21 +32,19 @@ export const signin = (req, res) => {
       token: req.user.token
     });
   } catch (err) {
-    logger.error(err);
-    res.status(500).json({ message: err.message, line: err.line });
+    next(err);
   };
 };
 
-export const signinError = (req, res) => {
+export const signinError = (req, res, next) => {
   try {
     res.status(500).json({ message: 'Error al registrarse' });
   } catch (err) {
-    logger.error(err);
-    res.status(500).json({ message: err.message, line: err.line });
+    next(err);
   };
 };
 
-export const logout = (req, res) => {
+export const logout = (req, res, next) => {
   try {
     if (readUser(req).name === 'Anonymous') {
       const msg = `[USERS]: No se puede cerrar una sesión anonima.`;
@@ -68,12 +64,11 @@ export const logout = (req, res) => {
       res.status(200).json({ message: msg });
     });
   } catch (err) {
-    logger.error(err);
-    res.status(500).json({ message: err.message, line: err.line });
+    next(err);
   };
 };
 
-export const currentUser = (req, res) => {
+export const currentUser = (req, res, next) => {
   try {
     if (req.user) {
       const { name, lastname, image, email } = req.user;
@@ -82,12 +77,11 @@ export const currentUser = (req, res) => {
       res.status(200).json({ name: 'Anonymous' });
     };
   } catch (err) {
-    logger.error(err);
-    res.status(500).json({ message: err.message, line: err.line });
+    next(err);
   };
 };
 
-export const deleteUser = async (req, res) => {
+export const deleteUser = async (req, res, next) => {
   try {
     const userDeleted = await usersDao.delete(req.params.id);
     userDeleted
@@ -97,7 +91,6 @@ export const deleteUser = async (req, res) => {
       })
       : res.status(404).json({ message: `Usuario no encontrado. ID:${req.params.id}` });
   } catch (err) {
-    logger.error(err);
-    res.status(500).json({ message: err.message, line: err.line });
+    next(err);
   };
 };

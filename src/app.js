@@ -14,6 +14,7 @@ import websockets from './config/websocket.js';
 import logger from './utils/logger.js';
 import apiRouter from './routes/apiRoutes.js';
 import indexRouter from './routes/indexRoutes.js';
+import errorHandler from './utils/errorHandler.js';
 import constant from './config/constant.js';
 import './config/passport-local.js';
 import 'dotenv/config';
@@ -89,6 +90,9 @@ app.use(function (err, req, res, next) {
 // ROUTES
 app.use('/api', apiRouter);
 app.use('/', indexRouter);
+
+// Error Handler
+app.use(errorHandler);
 
 // MONGODB
 connectDB()

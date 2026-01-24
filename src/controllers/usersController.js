@@ -1,5 +1,5 @@
 import logger from '../utils/logger.js';
-import { usersDao } from '../daos/index.js';
+import * as usersService from '../services/usersService.js';
 import { readUser } from '../utils/helpers.js';
 
 export const login = (req, res, next) => {
@@ -83,7 +83,7 @@ export const currentUser = (req, res, next) => {
 
 export const deleteUser = async (req, res, next) => {
   try {
-    const userDeleted = await usersDao.delete(req.params.id);
+    const userDeleted = await usersService.deleteUser(req.params.id);
     userDeleted
       ? res.status(200).json({
         message: 'Usuario eliminado correctamete.',

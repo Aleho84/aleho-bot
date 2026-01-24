@@ -9,7 +9,7 @@ export const seedAdmin = async () => {
             return;
         }
 
-        const adminEmail = 'admin';
+        const adminEmail = 'admin@admin.com';
         const existingAdmin = await usersDao.findByEmail(adminEmail);
 
         if (!existingAdmin) {
@@ -29,7 +29,7 @@ export const seedAdmin = async () => {
             };
 
             await usersDao.create(newAdmin);
-            logger.info('[SEEDER]: ✅ Usuario administrador creado con éxito: admin / admin');
+            logger.info('[SEEDER]: ✅ Usuario administrador creado con éxito: admin@admin.com / admin');
         } else {
             logger.info('[SEEDER]: ℹ️ El usuario administrador ya existe.');
         }

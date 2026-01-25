@@ -39,7 +39,7 @@ if (constant.PROTOCOL == 'https') {
 
 const ioServer = new Server(httpServer, {
     cors: {
-        origin: process.env.ALLOWED_ORIGINS?.split(',') || ['*'],
+        origin: constant.ALLOWED_ORIGINS,
         methods: ['GET', 'POST'],
         allowedHeaders: ['Content-Type', 'Authorization'],
         credentials: false,
@@ -53,7 +53,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(express.static(path.join(constant.__dirname, '../public')));
 app.use(cors({
-    origin: '*',
+    origin: constant.ALLOWED_ORIGINS,
     methods: 'GET, POST, PUT, DELETE, OPTIONS'
 }));
 app.use(cookieParser(constant.SECRET_STRING));
@@ -156,4 +156,7 @@ function onListening() {
         ? 'pipe ' + addr
         : 'port ' + addr.port;
     logger.info(`[SERVER]: 💻 Server PROTOCOL: ${constant.PROTOCOL} en PUERTO: ${constant.PORT}. 🪛  Worker PID: ${process.pid}.`);
+    const protocol = constant.HOST.includes('sytes.net') ? 'https' : constant.PROTOCOL;
+    const port = constant.HOST.includes('sytes.net') ? '' : ':' + constant.PORT;
+    logger.info(`[SERVER]: 💻 ${protocol}://${constant.HOST}${port}`);
 };

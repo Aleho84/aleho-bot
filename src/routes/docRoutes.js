@@ -9,7 +9,8 @@ import constant from '../config/constant.js';
 const packageJson = readJson();
 
 const protocol = constant.HOST.includes('sytes.net') ? 'https' : constant.PROTOCOL;
-const SERVER_SWAGGER = `${protocol}://${constant.HOST}`;
+const port = constant.HOST.includes('sytes.net') ? '' : ':' + constant.PORT;
+const SERVER_SWAGGER = `${protocol}://${constant.HOST}${port}`;
 const swaggerApp = express();
 
 // Swagger 

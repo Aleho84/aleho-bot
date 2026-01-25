@@ -33,6 +33,7 @@ const EMAIL_PASS = process.env.EMAIL_PASS;
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
 const KEY = process.env.KEY || './src/certificates/key.pem';
 const CERT = process.env.CERT || './src/certificates/cert.pem';
+const ALLOWED_ORIGINS = process.env.ALLOWED_ORIGINS ? process.env.ALLOWED_ORIGINS.split(',') : '*';
 
 const constant = {
     PROTOCOL,
@@ -65,7 +66,9 @@ const constant = {
     EMAIL_PASS,
     GEMINI_API_KEY,
     KEY,
-    CERT
+    KEY,
+    CERT,
+    ALLOWED_ORIGINS
 };
 
 export default constant;

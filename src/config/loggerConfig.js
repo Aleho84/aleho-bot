@@ -17,9 +17,7 @@ const loggerConfig = {
         db: constant.MONGOOSE_URI,
         collection: 'logs',
         level: 'info',
-        options: {
-          useUnifiedTopology: true
-        },
+        options: {},
         storeHost: true,
         metaKey: 'metadata',
         decolorize: true,

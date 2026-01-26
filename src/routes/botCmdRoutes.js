@@ -1,5 +1,7 @@
 import { Router } from 'express';
 import { auth, isAdmin } from '../config/jsonwebtoken.js';
+import { validateRequest } from '../middlewares/validationMiddleware.js';
+import { newFreeGamesSchema } from '../validators/botCmdValidators.js';
 
 const botCmdRouter = Router();
 
@@ -14,7 +16,7 @@ import {
 } from '../controllers/botCmdController.js';
 
 botCmdRouter.get('/findfreegames', auth, findFreeGames);
-botCmdRouter.get('/newfreegames/:id', auth, newFreeGames);
+botCmdRouter.get('/newfreegames/:id', auth, validateRequest(newFreeGamesSchema, 'params'), newFreeGames);
 botCmdRouter.get('/showlogs', auth, isAdmin, showLogs);
 botCmdRouter.get('/dolarhoy', auth, dolarHoy);
 botCmdRouter.get('/eurohoy', auth, euroHoy);
